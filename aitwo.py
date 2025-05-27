@@ -21,3 +21,25 @@ def peganoticia():
 
     return noticias
 peganoticia()
+
+import os
+
+def salvosim(novanoti, arquivo='noticias_cnn.csv'):
+    if os.path.exists(arquivo):
+        dfanti = pd.read_csv(arquivo)
+        notianti = set(dfanti['Notícias'].tolist())
+    else:
+        notianti = set()
+
+    unic = [noticia for noticia in novanoti if noticia not in notianti]
+
+    if unic:
+        dfnovo = pd.DataFrame({'Notícias': unic})
+        dfreal = pd.concat([dfanti, dfnovo], ignore_index=True) if notianti else dfnovo
+        dfreal.to_csv(arquivo, index=False, encoding='utf-8-sig')
+        print(f"{len(unic)} novas notícias foram adicionadas ao '{arquivo}'.")
+    else:
+        print("nenhuma nova notícia foi adcionada.")
+
+noticias = peganoticia()
+salvosim(noticias)
