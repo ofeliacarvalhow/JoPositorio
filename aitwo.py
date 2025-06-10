@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
+ignorar = {''}
+
 def peganoticia():
     cnn = 'https://www.cnnbrasil.com.br/'
     response = requests.get(cnn, headers={'User-Agent': 'Mozilla/5.0'})
@@ -43,3 +45,11 @@ def salvosim(novanoti, arquivo='noticias_cnn.csv'):
 
 noticias = peganoticia()
 salvosim(noticias)
+
+def limpar_tokenizar(texto):
+    palavras = re.findall(r'\b\w+\b', texto.lower())
+    return [p for p in palavras if p not in ignorar]
+
+teste = limpar_tokenizar('noticias_cnn.csv')
+print(teste)
+
